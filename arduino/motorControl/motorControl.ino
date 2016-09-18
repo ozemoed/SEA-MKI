@@ -9,9 +9,9 @@ const int motor2PinC = 5;
 const int motor2PinD = 6;
 
 const int forcePin1 = 10;
-const int forcePin2 = 10;
-const int forcePin3 = 10;
-const int forcePin4 = 10;
+const int forcePin2 = 11;
+const int forcePin3 = 12;
+const int forcePin4 = 13;
 
 const int totalSteps = 380;
 const int incrementalSteps = 50;
@@ -44,6 +44,7 @@ void loop() {
   int val3 = digitalRead(forcePin3);
   int val4 = digitalRead(forcePin4);
 
+  int shouldGoUp = 0;
   int delayMicro = 1000;
   if (val1 == 0) {
     delayMicro = 1100;
@@ -67,18 +68,29 @@ void loop() {
     
   } else if (val3 == 0) {
     delayMicro = 3000;
+    shouldGoUp = 1;
   } else if (val4 == 0) {
-    delayMicro = 1500;
+    delayMicro = 2000;
+    shouldGoUp = 1;
+  } else if (val4 == 1) {
+    delayMicro = 1100;
+    shouldGoUp = 1;
   }
 
-  // Arm going up
-  digitalWrite(dirPin, LOW);
-
-  digitalWrite(stepPin, HIGH);
-  delayMicroseconds(delayMicro);
-  digitalWrite(stepPin, LOW);
-  delayMicroseconds(delayMicro);
-  upCounter += 1;
-
+  if (shouldGoUp = 1) {
+    // Arm going up
+    digitalWrite(dirPin, LOW);
+    
+    digitalWrite(stepPin, HIGH);
+    delayMicroseconds(delayMicro);
+    digitalWrite(stepPin, LOW);
+    delayMicroseconds(delayMicro);
+    upCounter += 1;
+    
+    Serial.print("Pos: ");
+    Serial.println(upCounter);
+    return;
+  }
+  
 }
 
