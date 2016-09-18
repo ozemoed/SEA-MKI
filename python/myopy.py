@@ -30,8 +30,31 @@ import collections
 from scipy.signal import butter, lfilter
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib.animation as animation
 from scipy.signal import freqz
 
+# setup code for matplotlib liveplotting
+print("setting up plotting code")
+buffer = collections.deque( maxlen = 32)
+#for i in range( 0, 32):
+ #   buffer.append(0)
+xar = np.arange(0,32)
+
+def animate(i):
+    #animate.ycount = np.random.random_sample()
+    #buffer.append( animate.ycount)
+    ax1.clear()
+    ax1.plot( xar, list( buffer))
+animate.ycount = 0
+
+#fig = plt.figure()
+#ax1 = fig.add_subplot(1,1,1)
+
+#plt.axis([0, 10, 0, 1])
+#plt.ion()
+
+#plt.plot( xar, buffer)
+#plt.pause(0.1)
 # Sample rate and desired cutoff frequencies (in Hz).
 fs = 200.0
 lowcut = 2.0
@@ -83,7 +106,9 @@ class Listener(libmyo.DeviceListener):
         self.rssi = None
         self.emg = None
         self.last_time = 0
-        self.buffer = collections.deque( maxlen = 32)
+        #self.buffer = collections.deque( maxlen = 32)
+        #for i in range( 0, 32):
+        #    buffer.append(0)
 
     def output(self):
         ctime = time.time()
@@ -139,9 +164,11 @@ class Listener(libmyo.DeviceListener):
     def on_emg_data(self, myo, timestamp, emg):
         self.emg = emg
         #self.output()
-        self.buffer.append( emg)
-        print( list(self.buffer)[0])
-        #print( emg)
+        #self.buffer.append( emg)
+        #print( list(self.buffer)[0])
+        buffer.append( emg[0])
+        print( emg[0])
+
 
     def on_unlock(self, myo, timestamp):
         self.locked = False
@@ -203,18 +230,38 @@ class Listener(libmyo.DeviceListener):
         return self.emg
 
 print("Connecting to Myo ... Use CTRL^C to exit.")
+
+#ani = animation.FuncAnimation(fig, animate, interval=100)
+#plt.show()
+
 hub = libmyo.Hub()
 hub.set_locking_policy(libmyo.LockingPolicy.none)
 ldev = Listener()
+
 hub.run(1000, ldev)
+while hub.running and ldev.connected:
+    #time.sleep(0.25)
+    #print( buffer)
+    time.sleep(0.05)
+hub.stop()
+
+
+hub.shutdown()
+
+
+if 0:
+
+    hub.run(1000, ldev)
+
+#ani = animation.FuncAnimation(fig, animate, interval=100)
+#plt.show()
 
 # Listen to keyboard interrupts and stop the hub in that case.
-while hub.running and ldev.connected:
+    while hub.running and ldev.connected:
         key = ord(getch())
         if key == 27:
             break
-        time.sleep(0.10)
-
-print("shutting down")
-hub.shutdown()
-sys.exit("Error message")
+        time.sleep(0.05)
+        print("shutting down")
+    hub.shutdown()
+    sys.exit("Error message")
