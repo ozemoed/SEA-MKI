@@ -8,13 +8,11 @@ const int motor2PinB = 4;
 const int motor2PinC = 5;
 const int motor2PinD = 6;
 
-const int forcePin1 = 10;
-const int forcePin2 = 11;
-const int forcePin3 = 12;
-const int forcePin4 = 13;
+const int forcePin1 = 2;
+const int forcePin2 = 3;
+const int forcePin3 = 4;
+const int forcePin4 = 5;
 
-const int totalSteps = 380;
-const int incrementalSteps = 50;
 const int maxUpMovements = 5;
 
 int upCounter = 0;
@@ -38,6 +36,7 @@ void setup() {
 }
 
 void loop() {
+  
 
   int val1 = digitalRead(forcePin1);
   int val2 = digitalRead(forcePin2);
@@ -77,7 +76,7 @@ void loop() {
     shouldGoUp = 1;
   }
 
-  if (shouldGoUp = 1) {
+  if (shouldGoUp == 1) {
     // Arm going up
     digitalWrite(dirPin, LOW);
     
