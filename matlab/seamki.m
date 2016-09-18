@@ -94,12 +94,40 @@ while(1)
     bicepmag = mean( means(3:5));
     tricepmag = (means(1) + means(2) + means(6) + means(7) + means(8)) / 5;
     
-    if bicepmag > 0.5 && lastbm < 0.5
-        writeDigitalPin( uno, 'D13', 1);
-    elseif bicepmag < 0.5 && lastbm > 0.5
+    if 0
+        if bicepmag > 0.5 && lastbm < 0.5
+            writeDigitalPin( uno, 'D13', 1);
+        elseif bicepmag < 0.5 && lastbm > 0.5
+            writeDigitalPin( uno, 'D13', 0);
+        end
+        lastbm = bicepmag;
+    end
+    
+    if bicepmag > 0.1 && bicepmag < 0.25
+        writeDigitalPin( uno, 'D10', 1);
+        writeDigitalPin( uno, 'D11', 0);
+        writeDigitalPin( uno, 'D12', 0);
         writeDigitalPin( uno, 'D13', 0);
     end
-    lastbm = bicepmag;
+    if bicepmag > 0.25 && bicepmag < 0.4
+        writeDigitalPin( uno, 'D10', 1);
+        writeDigitalPin( uno, 'D11', 1);
+        writeDigitalPin( uno, 'D12', 0);
+        writeDigitalPin( uno, 'D13', 0);
+    end
+    if bicepmag > 0.4 && bicepmag < 0.6
+        writeDigitalPin( uno, 'D10', 1);
+        writeDigitalPin( uno, 'D11', 1);
+        writeDigitalPin( uno, 'D12', 1);
+        writeDigitalPin( uno, 'D13', 0);
+    end
+    if bicepmag > 0.6
+        writeDigitalPin( uno, 'D10', 1);
+        writeDigitalPin( uno, 'D11', 1);
+        writeDigitalPin( uno, 'D12', 1);
+        writeDigitalPin( uno, 'D13', 1);
+    end
+    
 end
 
 %%
