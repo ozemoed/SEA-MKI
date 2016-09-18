@@ -1,5 +1,4 @@
 
-
 const int stepPin = 7;
 const int dirPin = 8;
 const int motorEnablePin = 9;
@@ -8,6 +7,8 @@ const int totalSteps = 1000;
 
 
 void setup() {
+  Serial.begin(9600);
+  
   pinMode(stepPin, OUTPUT);
   pinMode(dirPin, OUTPUT);
   pinMode(motorEnablePin, OUTPUT);
@@ -17,24 +18,13 @@ void setup() {
 
 void loop() {
 
-  digitalWrite(dirPin, HIGH);
-  
-  for(int i=0; i< totalSteps; i++) {
-    digitalWrite(stepPin, HIGH);
-    delayMicroseconds(500);
-    digitalWrite(stepPin, LOW);
-    delayMicroseconds(500);
+  if (Serial.available() > 0) {
+
+    int incomingByte = Serial.read();
+
+    Serial.print("I received: ");
+    Serial.println(incomingByte, DEC);
   }
-
-//  digitalWrite(dirPin, LOW);
-//  
-//  for(int i=0; i< totalSteps; i++) {
-//    digitalWrite(stepPin, HIGH);
-//    delayMicroseconds(500);
-//    digitalWrite(stepPin, LOW);
-//    delayMicroseconds(500);
-//  }
-
 
 }
 
